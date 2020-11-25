@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.io as pio
 import json
 from urllib.request import urlopen
 import datetime
@@ -15,7 +16,6 @@ with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-c
     counties = json.load(response)
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-server = app.server
 # --------------------------------Data Load------------------------------------
 data_frame = pd.read_csv('New_York_State_Statewide_COVID-19_Testing_FIPS_3_Day.csv')
 copy_data_frame = data_frame.copy()
@@ -61,14 +61,14 @@ tab_card = dbc.Card([dbc.Tabs(
                 inverse=True,
                 outline=False),
 
-                html.Div(html.H5("Data refrences: COVID-19, Mobility"), style={"position": "fixed","bottom": 0,"left": 0,"right": 0,"padding": "1rem 1rem","background-color": "#ECF0F1",},
+                html.Div(html.Label(['References: ', html.A('COVID-19, ', href='https://data.cityofnewyork.us/browse?q=covid-19'), html.A('Transportation', href='https://www.google.com/covid19/mobility/')]), style={"position": "fixed","bottom": 0,"left": 0,"right": 0,"padding": "1rem 1rem","background-color": "#ECF0F1",},
                 ),]),
 # ------------------------------------------------------------------------------
 
 #-----------------------------Exploration Tab----------------------------------
 
                 dbc.Tab(label="Data Exploration", label_style={"color": "#18BC9C"},tab_id="tab-2", children = [
-                    dbc.Card([dbc.CardBody([html.H4("The left diagram shows a heatmap of  coronavirus infections throughout New York state. It provides two dopdowns, one for infections and second one for a date selection. Information about specific New York county and cases can be obtained by hoovering over the individual counties. The right diagram compares infection data in red and employee mobility in blue. There are two more dropdowns in this figure, first one is a county selector and the last one is a mobility scalar. County selector allows for individual county selection and mobility scalar is introduced in order to scale the mobility axis. Scalar is necessary due to some counties having a large number of cases that lead to drastic change in the y-axis scale. ", className="card-title")]),
+                    dbc.Card([dbc.CardBody([html.H4("The left diagram shows a heatmap of coronavirus infections throughout New York state. It provides two dropdowns, one for infections and another for date selection. Information about specific New York counties can be obtained by hovering over the county you are interested in. The right diagram compares infection data in red and employee mobility in blue. There are two more dropdowns in this figure. The first one is a county selector and the second is a mobility scalar. The county selector allows the user to look at cases for an individual county and the mobility scalar is introduced in order to scale the mobility axis. A scalar is necessary due to some counties having a large number of cases that lead to drastic change in the y-axis scale.", className="card-title")]),
                     ]),
 #-----------------------------Map Graph Card----------------------------------
 #-----------------------------Dropdown Info----------------------------------
@@ -176,7 +176,8 @@ tab_card = dbc.Card([dbc.Tabs(
 
                             ),
                     dbc.Col(dcc.Dropdown(id='Mobility_Scalar', placeholder='Select',
-                                                 options=[{'label': '5', 'value': 5},
+                                                 options=[{'label': '1', 'value': 1},
+                                                            {'label': '5', 'value': 5},
                                                           {'label': '10', 'value': 10}],
                                                           value = 1),
                                     width={'size': 2, "offset": 0}
@@ -204,7 +205,7 @@ tab_card = dbc.Card([dbc.Tabs(
 
 #-----------------------------Correlation Tab----------------------------------
                 dbc.Tab(label="Correlation Analysis", label_style={"color": "#18BC9C"},tab_id="tab-3", children = [
-                    dbc.Card([dbc.CardBody([html.H4("The left diagram shows daily infection data in red and employee mobility in blue. It is accompanied by two dropdowns: a county selector and a shift selector. Shift selector moves the infection graph backwards, in order to explore the lag between the infection and mobility. The correlation between infections and mobility is automatically updated on the right diagram. ", className="card-title")]),
+                    dbc.Card([dbc.CardBody([html.H4("The left diagram shows daily infection data in red and employee mobility in blue. It is accompanied by two dropdowns: a county selector and a shift selector. The shift selector moves the infection graph backwards, in order to explore the lag between level of mobility and reported infections. The correlation between infections and mobility is automatically updated on the right diagram.", className="card-title")]),
                     ],
                     inverse=False,
                     outline=False),
@@ -224,7 +225,7 @@ tab_card = dbc.Card([dbc.Tabs(
                                                                   {'label': '14', 'value': 14},
                                                                   {'label': '21', 'value': 21},
                                                                   {'label': '28', 'value': 28}],
-                                                                  value = 1),
+                                                                  ),
                                             width={'size': 2, "offset": 1}
                                     )
                         ]),
@@ -404,7 +405,7 @@ def upadate_graph(date_selected, county_selcted, infection_dropdown, Mobility_Sc
     fig3.update_yaxes(zeroline=True, zerolinewidth=1, zerolinecolor='white')
 
     fig4 = px.scatter(x=X, y=Y, trendline="ols")
-    fig4.update_layout(plot_bgcolor="#2C3E50", paper_bgcolor="#2C3E50", font_color="white", width=900, height=800, title = "Correlation between Coronavirus Cases and Mobility")
+    fig4.update_layout(plot_bgcolor="#2C3E50", paper_bgcolor="#2C3E50", font_color="white", width=900, height=800, title = "Correlation Between Coronavirus Cases and Mobility")
     fig4.update_xaxes(showline=True, linewidth=1, linecolor='white')
     fig4.update_yaxes(showline=True, linewidth=1, linecolor='white')
     fig4.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#2C3E50')
