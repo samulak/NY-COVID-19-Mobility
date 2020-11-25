@@ -14,7 +14,6 @@ pip install plotly==4.13.0
 pip install plotly-express== 0.4.1
 pip install urlopen==1.0.0
 pip install urllib3==1.26.2
-pip install jsonlib==1.6.1
 pip install DateTime==4.3
 ```
 ### Step 2:
