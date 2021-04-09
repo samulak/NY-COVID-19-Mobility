@@ -1,4 +1,7 @@
 # NY-COVID-19-Transportation
+Application can be viewed at: https://ny-mobility.herokuapp.com/
+
+Note: It takes a minute to load.
 
 ## Application setup:
 Application was created with python 3.8.
