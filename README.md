@@ -1,4 +1,4 @@
-# NY-COVID-19-Transportation
+# NY-COVID-19-Mobility
 Application can be viewed at: https://ny-mobility.herokuapp.com/
 
 Note: It takes a minute to load.
